@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newsletter/src/core/routing/router.dart';
 
 import 'main_development.dart' as development;
 // import 'main_staging.dart' as staging;
@@ -12,6 +13,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp.router(
+      themeMode: ThemeMode.system,
+      routerConfig: router(),
+    );
   }
 }

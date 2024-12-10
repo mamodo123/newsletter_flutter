@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_hybrid.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_hybrid_impl.dart';
@@ -8,52 +9,54 @@ import 'package:newsletter/src/data/services/newsletter/remote/newsletter_servic
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_create_use_case.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_get_use_case.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_case.dart';
-import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 import '../../data/services/newsletter/local/newsletter_service_sqlite.dart';
 import '../../data/services/newsletter/remote/newsletter_service_firebase.dart';
 
-List<SingleChildWidget> _sharedProviders = [
-  Provider(
-    lazy: true,
-    create: (context) => NewsletterGetUseCase(
-      newsletterRepository: context.read(),
-    ),
-  ),
-  Provider(
-    lazy: true,
-    create: (context) => NewsletterCreateUseCase(
-      newsletterRepository: context.read(),
-    ),
-  ),
-];
+// Shared Dependencies
+void _sharedDependencies() {
+  Get.lazyPut(() => NewsletterGetUseCase(newsletterRepository: Get.find()));
+  Get.lazyPut(() => NewsletterCreateUseCase(newsletterRepository: Get.find()));
+}
 
-List<SingleChildWidget> get providersHybrid => [
-      Provider<NewsletterServiceLocal>(
-          create: (context) => NewsletterServiceSqlite()),
-      Provider<NewsletterServiceRemote>(
-          create: (context) => NewsletterServiceFirebase()),
-      Provider<NewsletterRepository>(
-        create: (context) => NewsletterRepositoryHybridImpl(
-            newsletterServiceLocal: context.read(),
-            newsletterServiceRemote: context.read()),
-      ),
-      ..._sharedProviders,
-      Provider(
-        lazy: true,
-        create: (context) => NewsletterSyncUseCase(
-          newsletterRepository: context.read<NewsletterRepository>()
-              as NewsletterRepositoryHybrid,
-        ),
-      ),
-    ];
+// Bindings for Hybrid Providers
+class HybridBindings extends Bindings {
+  @override
+  void dependencies() {
+    // Services
+    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceSqlite());
+    Get.lazyPut<NewsletterServiceRemote>(() => NewsletterServiceFirebase());
 
-List<SingleChildWidget> get providersLocal => [
-      Provider<NewsletterServiceLocal>(
-          create: (context) => NewsletterServiceMock()),
-      Provider<NewsletterRepository>(
-          create: (context) => NewsletterRepositoryLocal(
-              newsletterServiceLocal: context.read())),
-      ..._sharedProviders,
-    ];
+    // Repositories
+    Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryHybridImpl(
+          newsletterServiceLocal: Get.find(),
+          newsletterServiceRemote: Get.find(),
+        ));
+
+    // Shared Use Cases
+    _sharedDependencies();
+
+    // Specific Use Cases
+    Get.lazyPut(() => NewsletterSyncUseCase(
+          newsletterRepository:
+              Get.find<NewsletterRepository>() as NewsletterRepositoryHybrid,
+        ));
+  }
+}
+
+// Bindings for Local Providers
+class LocalBindings extends Bindings {
+  @override
+  void dependencies() {
+    // Services
+    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceMock());
+
+    // Repositories
+    Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryLocal(
+          newsletterServiceLocal: Get.find(),
+        ));
+
+    // Shared Use Cases
+    _sharedDependencies();
+  }
+}
