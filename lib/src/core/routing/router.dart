@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:newsletter/src/core/routing/routes.dart';
 
+import '../../presentation/newsletter/screens/newsletter_create_screen.dart';
+import '../../presentation/newsletter/screens/newsletter_list_screen.dart';
 import '../../presentation/newsletter/view_models/newsletter_view_model.dart';
-import '../../presentation/newsletter/widgets/create/newsletter_create_screen.dart';
-import '../../presentation/newsletter/widgets/list/newsletter_list_screen.dart';
 
 List<GetPage> appRoutes = [
   GetPage(
