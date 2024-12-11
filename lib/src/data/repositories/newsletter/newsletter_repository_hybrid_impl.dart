@@ -20,7 +20,7 @@ class NewsletterRepositoryHybridImpl implements NewsletterRepositoryHybrid {
   }
 
   @override
-  Future<Result<List<Newsletter>>> getNewsletterList() {
+  Stream<Result<List<Newsletter>>> getNewsletterStream() {
     // TODO: implement getNewsletterList
     throw UnimplementedError();
   }

@@ -26,9 +26,9 @@ class NewsletterRepositoryRemote implements NewsletterRepository {
   }
 
   @override
-  Future<Result<List<Newsletter>>> getNewsletterList() async {
-    try {
-      return Result.ok((await newsletterServiceRemote.getNewsletterList())
+  Stream<Result<List<Newsletter>>> getNewsletterStream() {
+    return newsletterServiceRemote.getNewsletterList().map((newsletterList) {
+      return Result.ok(newsletterList
           .map((e) => Newsletter(
               title: e.title,
               category: e.category,
@@ -36,8 +36,8 @@ class NewsletterRepositoryRemote implements NewsletterRepository {
               link: e.link,
               createdAt: e.createdAt))
           .toList());
-    } on Exception catch (error) {
+    }).handleError((error) {
       return Result.error(error);
-    }
+    });
   }
 }

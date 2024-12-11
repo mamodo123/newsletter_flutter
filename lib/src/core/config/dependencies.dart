@@ -7,7 +7,6 @@ import 'package:newsletter/src/data/services/newsletter/local/newsletter_service
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_mock.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_create_use_case.dart';
-import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_get_use_case.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_case.dart';
 
 import '../../data/services/newsletter/local/newsletter_service_sqlite.dart';
@@ -15,7 +14,6 @@ import '../../data/services/newsletter/remote/newsletter_service_firebase.dart';
 
 // Shared Dependencies
 void _sharedDependencies() {
-  Get.lazyPut(() => NewsletterGetUseCase(newsletterRepository: Get.find()));
   Get.lazyPut(() => NewsletterCreateUseCase(newsletterRepository: Get.find()));
 }
 
