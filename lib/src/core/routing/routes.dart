@@ -3,6 +3,6 @@
 // found in the LICENSE file.
 
 abstract final class Routes {
-  static const newsletter = '/newsletter';
-  static const createNewsletter = '/newsletter/create';
+  static const newsletter = '/';
+  static const createNewsletter = '/create';
 }

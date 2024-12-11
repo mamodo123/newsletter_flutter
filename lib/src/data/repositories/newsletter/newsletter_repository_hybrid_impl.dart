@@ -1,17 +1,20 @@
 import 'package:newsletter/src/core/utils/result.dart';
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/newsletter.dart';
 import 'newsletter_repository_hybrid.dart';
 
-class NewsletterRepositoryHybridImpl implements NewsletterRepositoryHybrid {
+class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
   final NewsletterServiceLocal newsletterServiceLocal;
   final NewsletterServiceRemote newsletterServiceRemote;
 
   NewsletterRepositoryHybridImpl(
       {required this.newsletterServiceLocal,
-      required this.newsletterServiceRemote});
+      required this.newsletterServiceRemote})
+      : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
+            [] as Result<List<Newsletter>>));
 
   @override
   Future<Result<void>> createNewsletter(Newsletter newsletter) {

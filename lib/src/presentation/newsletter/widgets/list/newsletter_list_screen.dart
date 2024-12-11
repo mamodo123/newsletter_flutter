@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newsletter/src/presentation/newsletter/view_models/newsletter_view_model.dart';
 
-import '../../../../domain/entities/newsletter.dart';
+import '../../../../core/routing/routes.dart';
 
 class NewsletterListScreen extends StatelessWidget {
   const NewsletterListScreen({super.key});
@@ -15,36 +15,37 @@ class NewsletterListScreen extends StatelessWidget {
       ),
       body: GetBuilder<NewsletterViewModel>(
         builder: (controller) {
-          return Obx(
-            () {
-              return Container(
-                color: Colors.blue,
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Newsletter Count: ${controller.newsletters.length}',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 20),
+          return Container(
+            color: Colors.blue,
+            child: Obx(
+              () {
+                return ListView.builder(
+                  itemCount: controller.newsletters.length,
+                  itemBuilder: (context, index) {
+                    var newsletter = controller.newsletters[index];
+                    return Card(
+                      margin: const EdgeInsets.all(8.0),
+                      elevation: 4.0,
+                      child: ListTile(
+                        title: Text(newsletter.title),
+                        subtitle: Text(newsletter.summary),
+                        onTap: () {
+                          //TODO
+                        },
                       ),
-                      ElevatedButton(
-                          onPressed: () =>
-                              controller.createNewsletter.execute(Newsletter(
-                                title: '',
-                                category: '',
-                                summary: '',
-                                link: '',
-                                createdAt: DateTime.now(),
-                              )),
-                          child: const Text('Criar newsletter'))
-                    ],
-                  ),
-                ),
-              );
-            },
+                    );
+                  },
+                );
+              },
+            ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Get.toNamed(Routes.createNewsletter);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

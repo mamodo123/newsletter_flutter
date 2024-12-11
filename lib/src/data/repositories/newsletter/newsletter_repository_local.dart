@@ -1,14 +1,29 @@
-import 'package:newsletter/src/core/utils/result.dart';
-import 'package:newsletter/src/data/models/newsletter/newsletter_local.dart';
-import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
-import '../../../domain/entities/newsletter.dart';
-import 'newsletter_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class NewsletterRepositoryLocal implements NewsletterRepository {
+import '../../../core/utils/result.dart';
+import '../../../domain/entities/newsletter.dart';
+import '../../models/newsletter/newsletter_local.dart';
+import '../../services/newsletter/local/newsletter_service_local.dart';
+import 'newsletter_repository.dart';
+
+class NewsletterRepositoryLocal extends NewsletterRepository {
   final NewsletterServiceLocal newsletterServiceLocal;
 
-  NewsletterRepositoryLocal({required this.newsletterServiceLocal});
+  NewsletterRepositoryLocal({required this.newsletterServiceLocal})
+      : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
+            const Result.ok([]))) {
+    newsletterServiceLocal.getNewsletterStream().listen((newsletterList) {
+      subject.add(Result.ok(newsletterList
+          .map<Newsletter>((e) => Newsletter(
+                title: e.title,
+                category: e.category,
+                summary: e.summary,
+                link: e.link,
+                createdAt: e.createdAt,
+              ))
+          .toList()));
+    });
+  }
 
   @override
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {
@@ -29,18 +44,6 @@ class NewsletterRepositoryLocal implements NewsletterRepository {
 
   @override
   Stream<Result<List<Newsletter>>> getNewsletterStream() {
-    return newsletterServiceLocal.getNewsletterStream().map((newsletterList) {
-      return Result.ok(newsletterList
-          .map((e) => Newsletter(
-        title: e.title,
-        category: e.category,
-        summary: e.summary,
-        link: e.link,
-        createdAt: e.createdAt,
-      ))
-          .toList());
-    }).handleError((error) {
-      return Result.error(error);
-    });
+    return subject.stream;
   }
 }

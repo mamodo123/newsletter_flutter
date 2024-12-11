@@ -16,25 +16,23 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
     ),
   );
 
-  final BehaviorSubject<List<NewsletterLocal>> _subject =
-      BehaviorSubject<List<NewsletterLocal>>.seeded([]);
-
-  NewsletterServiceMock() {
-    _subject.add(List.unmodifiable(_items));
+  NewsletterServiceMock()
+      : super(BehaviorSubject<List<NewsletterLocal>>.seeded([])) {
+    subject.add(List.unmodifiable(_items));
   }
 
   @override
   Stream<List<NewsletterLocal>> getNewsletterStream() {
-    return _subject.stream;
+    return subject.stream;
   }
 
   @override
   Future<void> addNewsletter(NewsletterLocal newsletter) async {
     _items.add(newsletter);
-    _subject.add(List.unmodifiable(_items));
+    subject.add(List.unmodifiable(_items));
   }
 
   void dispose() {
-    _subject.close();
+    subject.close();
   }
 }

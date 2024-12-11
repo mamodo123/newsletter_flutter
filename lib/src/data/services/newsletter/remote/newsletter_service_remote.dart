@@ -3,11 +3,8 @@ import 'dart:async';
 import 'package:newsletter/src/data/models/newsletter/newsletter_remote.dart';
 
 abstract class NewsletterServiceRemote {
-  final StreamController<List<NewsletterRemote>> controller;
 
-  NewsletterServiceRemote(this.controller);
-
-  Stream<List<NewsletterRemote>> getNewsletterList();
+  Stream<List<NewsletterRemote>> getNewsletterStream();
 
   Future<void> addNewsletter(NewsletterRemote newsletter);
 }

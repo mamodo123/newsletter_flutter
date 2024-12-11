@@ -1,14 +1,17 @@
 import 'package:newsletter/src/core/utils/result.dart';
 import 'package:newsletter/src/data/models/newsletter/newsletter_remote.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/newsletter.dart';
 import '../../services/newsletter/remote/newsletter_service_remote.dart';
 import 'newsletter_repository.dart';
 
-class NewsletterRepositoryRemote implements NewsletterRepository {
+class NewsletterRepositoryRemote extends NewsletterRepository {
   final NewsletterServiceRemote newsletterServiceRemote;
 
-  NewsletterRepositoryRemote({required this.newsletterServiceRemote});
+  NewsletterRepositoryRemote({required this.newsletterServiceRemote})
+      : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
+            [] as Result<List<Newsletter>>));
 
   @override
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {
@@ -27,7 +30,7 @@ class NewsletterRepositoryRemote implements NewsletterRepository {
 
   @override
   Stream<Result<List<Newsletter>>> getNewsletterStream() {
-    return newsletterServiceRemote.getNewsletterList().map((newsletterList) {
+    return newsletterServiceRemote.getNewsletterStream().map((newsletterList) {
       return Result.ok(newsletterList
           .map((e) => Newsletter(
               title: e.title,

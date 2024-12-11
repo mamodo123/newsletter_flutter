@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../view_models/newsletter_view_model.dart';
 
 class NewsletterCreateScreen extends StatefulWidget {
   const NewsletterCreateScreen({super.key});
@@ -10,8 +13,10 @@ class NewsletterCreateScreen extends StatefulWidget {
 class _NewsletterCreateScreenState extends State<NewsletterCreateScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-    );
+    return GetBuilder<NewsletterViewModel>(builder: (controller) {
+      return Container(
+        color: Colors.blue,
+      );
+    });
   }
 }
