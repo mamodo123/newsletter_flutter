@@ -35,7 +35,7 @@ class _NewsletterCreateScreenState extends State<NewsletterCreateScreen> {
   }
 
   Widget _buildTextField(TextEditingController controller, String label,
-      {int? maxLines,
+      {int? maxLines = 1,
       int? maxLength,
       bool showCounter = false,
       String? Function(String?)? validator}) {

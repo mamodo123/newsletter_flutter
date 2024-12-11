@@ -5,4 +5,5 @@
 abstract final class Routes {
   static const newsletter = '/';
   static const createNewsletter = '/create';
+  static const seeNewsletter = '/newsletter';
 }

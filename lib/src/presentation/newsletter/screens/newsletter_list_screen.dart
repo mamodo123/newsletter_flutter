@@ -27,7 +27,7 @@ class NewsletterListScreen extends StatelessWidget {
                       title: Text(newsletter.title),
                       subtitle: Text(newsletter.summary),
                       onTap: () {
-                        //TODO
+                        Get.toNamed(Routes.seeNewsletter, arguments: newsletter);
                       },
                     ),
                   );
