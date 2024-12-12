@@ -34,7 +34,7 @@ abstract final class AppColors {
     secondary: AppColors.white1,
     onSecondary: AppColors.black1,
     surface: AppColors.black1,
-    onSurface: Colors.red,
+    onSurface: Colors.white,
     error: Colors.black,
     onError: AppColors.red1,
   );
