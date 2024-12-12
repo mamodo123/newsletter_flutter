@@ -7,7 +7,7 @@ import 'package:newsletter/src/data/repositories/newsletter/newsletter_repositor
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_remote.dart';
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
-import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_create_use_case.dart';
+import 'package:newsletter/src/domain/use_cases/newsletter/create/newsletter_create_use_case.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_case.dart';
 
 import '../../data/services/newsletter/local/newsletter_service_sqlite.dart';

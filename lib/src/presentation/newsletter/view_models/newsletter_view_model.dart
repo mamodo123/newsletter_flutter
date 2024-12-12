@@ -6,7 +6,7 @@ import 'package:newsletter/src/data/repositories/newsletter/newsletter_repositor
 import 'package:newsletter/src/domain/entities/newsletter.dart';
 
 import '../../../core/utils/result.dart';
-import '../../../domain/use_cases/newsletter/newsletter_create_use_case.dart';
+import '../../../domain/use_cases/newsletter/create/newsletter_create_use_case.dart';
 
 class NewsletterViewModel extends GetxController {
   final NewsletterCreateUseCase _newsletterCreateUseCase;
