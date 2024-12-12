@@ -10,6 +10,7 @@ import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_c
 
 import '../../data/services/newsletter/local/newsletter_service_sqlite.dart';
 import '../../data/services/newsletter/remote/newsletter_service_firebase.dart';
+import 'databases/sqlite_config.dart';
 
 // Shared Dependencies
 void _sharedDependencies() {
@@ -21,7 +22,10 @@ class HybridBindings extends Bindings {
   @override
   void dependencies() {
     // Services
-    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceSqlite());
+    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceSqlite(
+        dbPath: SQLiteConfig.dbPath,
+        dbVersion: SQLiteConfig.dbVersion,
+        onCreate: SQLiteConfig.onCreate));
     Get.lazyPut<NewsletterServiceRemote>(() => NewsletterServiceFirebase());
 
     // Repositories
@@ -46,7 +50,10 @@ class LocalBindings extends Bindings {
   @override
   void dependencies() {
     // Services
-    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceSqlite());
+    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceSqlite(
+        dbPath: SQLiteConfig.dbPath,
+        dbVersion: SQLiteConfig.dbVersion,
+        onCreate: SQLiteConfig.onCreate));
 
     // Repositories
     Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryLocal(

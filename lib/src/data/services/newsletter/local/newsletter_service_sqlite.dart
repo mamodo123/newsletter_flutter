@@ -4,20 +4,24 @@ import 'package:newsletter/src/core/helper/sqlite_helper.dart';
 import 'package:newsletter/src/data/models/newsletter/newsletter_local.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../../core/config/sqlite_config.dart';
+import '../../../../core/config/databases/sqlite_config.dart';
 import 'newsletter_service_local.dart';
 
 class NewsletterServiceSqlite extends NewsletterServiceLocal {
   static const table = 'Newsletter';
 
-  NewsletterServiceSqlite()
+  final String dbPath;
+  final int dbVersion;
+  final List<String> onCreate;
+
+  NewsletterServiceSqlite(
+      {required this.dbPath, required this.dbVersion, required this.onCreate})
       : super(BehaviorSubject<List<NewsletterLocal>>.seeded([])) {
     loadNewsletters();
   }
 
   Future<void> loadNewsletters() async {
-    final db = await SQLiteHelper.getDatabase(
-        SQLiteConfig.dbPath, SQLiteConfig.dbVersion, SQLiteConfig.onCreate);
+    final db = await SQLiteHelper.getDatabase(dbPath, dbVersion, onCreate);
     final newsletterDBReturn =
         await SQLiteHelper.runSelectSql('select * from $table', db, []);
     final newsletterMap = newsletterDBReturn
