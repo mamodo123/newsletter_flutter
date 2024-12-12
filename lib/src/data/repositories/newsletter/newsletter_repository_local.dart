@@ -23,6 +23,12 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
               ))
           .toList()));
     });
+
+    @override
+    void dispose() {
+      newsletterServiceLocal.dispose();
+      super.dispose();
+    }
   }
 
   @override

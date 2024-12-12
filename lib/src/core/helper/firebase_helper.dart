@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class FirebaseHelper {
-  static Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getCollection(
-      String collectionPath) async {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getCollectionStream(
+      String collectionPath) {
     final firestoreInstance = FirebaseFirestore.instance;
-    return (await firestoreInstance.collection(collectionPath).get()).docs;
+    return firestoreInstance.collection(collectionPath).snapshots();
   }
 
   static Future<void> insertDocument(

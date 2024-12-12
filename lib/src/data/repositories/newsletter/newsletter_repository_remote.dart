@@ -43,4 +43,10 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
       return Result.error(error);
     });
   }
+
+  @override
+  void dispose() {
+    newsletterServiceRemote.dispose();
+    super.dispose();
+  }
 }

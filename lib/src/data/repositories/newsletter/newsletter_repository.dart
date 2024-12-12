@@ -11,4 +11,8 @@ abstract class NewsletterRepository {
   Stream<Result<List<Newsletter>>> getNewsletterStream();
 
   Future<Result<void>> createNewsletter(Newsletter newsletter);
+
+  void dispose() {
+    subject.close();
+  }
 }

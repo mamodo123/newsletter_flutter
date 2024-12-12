@@ -8,17 +8,17 @@ import 'newsletter_service_remote.dart';
 
 class NewsletterServiceFirebase extends NewsletterServiceRemote {
   final String collectionPath;
+  late final StreamSubscription collectionStream;
 
   NewsletterServiceFirebase({required this.collectionPath})
       : super(BehaviorSubject<List<NewsletterRemote>>.seeded([])) {
-    loadNewsletter();
-  }
-
-  Future<void> loadNewsletter() async {
-    final docs = await FirebaseHelper.getCollection(collectionPath);
-    final newsletterMap =
-        docs.map((e) => NewsletterRemote.fromJson(json: e.data())).toList();
-    subject.add(newsletterMap);
+    collectionStream =
+        FirebaseHelper.getCollectionStream(collectionPath).listen((data) {
+      final newsletterMap = data.docs
+          .map((e) => NewsletterRemote.fromJson(json: e.data()))
+          .toList();
+      subject.add(newsletterMap);
+    });
   }
 
   @override
@@ -31,5 +31,11 @@ class NewsletterServiceFirebase extends NewsletterServiceRemote {
   @override
   Stream<List<NewsletterRemote>> getNewsletterStream() {
     return subject.stream;
+  }
+
+  @override
+  void dispose() {
+    collectionStream.cancel();
+    super.dispose();
   }
 }
