@@ -8,6 +8,7 @@ import 'package:newsletter/src/data/repositories/newsletter/newsletter_repositor
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/create/newsletter_create_use_case.dart';
+import 'package:newsletter/src/domain/use_cases/newsletter/create/newsletter_create_use_case_remote.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_case.dart';
 
 import '../../data/services/newsletter/local/newsletter_service_sqlite.dart';
@@ -15,9 +16,7 @@ import '../../data/services/newsletter/remote/newsletter_service_firebase.dart';
 import 'databases/sqlite_config.dart';
 
 // Shared Dependencies
-void _sharedDependencies() {
-  Get.lazyPut(() => NewsletterCreateUseCase(newsletterRepository: Get.find()));
-}
+void _sharedDependencies() {}
 
 // Bindings for Hybrid Providers
 class HybridBindings extends Bindings {
@@ -39,6 +38,10 @@ class HybridBindings extends Bindings {
 
     // Shared Use Cases
     _sharedDependencies();
+
+    Get.lazyPut<NewsletterCreateUseCase>(() => NewsletterCreateUseCaseRemote(
+        newsletterRepository:
+            Get.find<NewsletterRepository>() as NewsletterRepositoryRemote));
 
     // Specific Use Cases
     Get.lazyPut(() => NewsletterSyncUseCase(
@@ -65,6 +68,9 @@ class LocalBindings extends Bindings {
 
     // Shared Use Cases
     _sharedDependencies();
+
+    Get.lazyPut<NewsletterCreateUseCase>(
+        () => NewsletterCreateUseCase(newsletterRepository: Get.find()));
   }
 }
 
@@ -83,5 +89,9 @@ class RemoteBindings extends Bindings {
 
     // Shared Use Cases
     _sharedDependencies();
+
+    Get.lazyPut<NewsletterCreateUseCase>(() => NewsletterCreateUseCaseRemote(
+        newsletterRepository:
+            Get.find<NewsletterRepository>() as NewsletterRepositoryRemote));
   }
 }

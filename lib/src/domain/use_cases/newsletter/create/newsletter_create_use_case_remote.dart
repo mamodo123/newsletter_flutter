@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:newsletter/src/core/utils/result.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_remote.dart';
 
+import '../../../../core/helper/fcm_helper.dart';
 import '../../../entities/newsletter.dart';
 import 'newsletter_create_use_case.dart';
 
@@ -13,16 +15,21 @@ class NewsletterCreateUseCaseRemote extends NewsletterCreateUseCase {
   @override
   Future<Result<void>> execute(Newsletter newsletter) async {
     try {
-      final createNewsletterResult =
+      final createNewsLetterResult =
           await newsletterRepository.createNewsletter(newsletter);
 
       try {
-        // TODO Call FCM here
+        if (await InternetConnection().hasInternetAccess) {
+          await FCMHelper.sendNotificationToTopic(
+              topic: 'newsletter',
+              title: newsletter.title,
+              body: newsletter.summary);
+        }
       } catch (e) {
         debugPrint(e.toString());
       }
 
-      return createNewsletterResult;
+      return createNewsLetterResult;
     } on Exception catch (error) {
       return Result.error(error);
     }
