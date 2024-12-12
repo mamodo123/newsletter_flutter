@@ -34,7 +34,7 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
         summary: newsletter.summary,
         link: newsletter.link,
         createdAt: newsletter.createdAt,
-        synchronized: 0,
+        remote: null,
       ));
       return const Result.ok(null);
     } on Exception catch (error) {

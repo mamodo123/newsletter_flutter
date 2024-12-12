@@ -16,6 +16,11 @@ class NewsletterListScreen extends StatelessWidget {
         builder: (controller) {
           return Obx(
             () {
+              if (controller.newsletters.isEmpty) {
+                return const Center(
+                  child: Text('There are no registered newsletters yet'),
+                );
+              }
               return ListView.builder(
                 itemCount: controller.newsletters.length,
                 itemBuilder: (context, index) {
@@ -27,7 +32,8 @@ class NewsletterListScreen extends StatelessWidget {
                       title: Text(newsletter.title),
                       subtitle: Text(newsletter.summary),
                       onTap: () {
-                        Get.toNamed(Routes.seeNewsletter, arguments: newsletter);
+                        Get.toNamed(Routes.seeNewsletter,
+                            arguments: newsletter);
                       },
                     ),
                   );

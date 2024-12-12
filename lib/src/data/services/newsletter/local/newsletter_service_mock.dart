@@ -12,7 +12,7 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
       summary: 'Teste $index',
       link: 'Teste $index',
       createdAt: DateTime.now(),
-      synchronized: 0,
+      remote: null,
     ),
   );
 
@@ -32,7 +32,4 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
     subject.add(List.unmodifiable(_items));
   }
 
-  void dispose() {
-    subject.close();
-  }
 }

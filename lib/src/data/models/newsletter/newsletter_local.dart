@@ -1,7 +1,7 @@
 import 'package:newsletter/src/data/models/newsletter/newsletter.dart';
 
 class NewsletterLocal extends NewsletterModel {
-  final int synchronized;
+  final String? remote;
 
   const NewsletterLocal(
       {required super.title,
@@ -9,13 +9,19 @@ class NewsletterLocal extends NewsletterModel {
       required super.summary,
       required super.link,
       required super.createdAt,
-      required this.synchronized});
+      required this.remote});
 
-  NewsletterLocal.fromJson({required super.json})
-      : synchronized = json['synchronized'],
-        super.fromJson();
+  NewsletterLocal.fromJson({required Map<String, dynamic> json})
+      : remote = json['remote'],
+        super(
+          title: json['title'],
+          category: json['category'],
+          summary: json['summary'],
+          link: json['link'],
+          createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+        );
 
   @override
-  Map<String, dynamic> toJson() =>
-      {...super.toJson(), 'synchronized': synchronized};
+  Map<String, dynamic> toJson() => {...super.toJson(), 'remote': remote}
+    ..['createdAt'] = createdAt.millisecondsSinceEpoch;
 }

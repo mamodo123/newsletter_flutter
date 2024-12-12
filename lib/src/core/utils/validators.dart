@@ -14,8 +14,8 @@ class Validators {
   }
 
   static String? validateSummary(String? value) {
-    if (value == null || value.trim().length < 3) {
-      return 'Summary must be at least 3 characters long.';
+    if (value == null || value.trim().length < 20) {
+      return 'Summary must be at least 20 characters long.';
     }
     return null;
   }

@@ -11,4 +11,8 @@ abstract class NewsletterServiceLocal {
   Stream<List<NewsletterLocal>> getNewsletterStream();
 
   Future<void> addNewsletter(NewsletterLocal newsletter);
+
+  void dispose() {
+    subject.close();
+  }
 }

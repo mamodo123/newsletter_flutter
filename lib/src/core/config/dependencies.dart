@@ -4,7 +4,6 @@ import 'package:newsletter/src/data/repositories/newsletter/newsletter_repositor
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_hybrid_impl.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_local.dart';
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
-import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_mock.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_create_use_case.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_case.dart';
@@ -47,7 +46,7 @@ class LocalBindings extends Bindings {
   @override
   void dependencies() {
     // Services
-    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceMock());
+    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceSqlite());
 
     // Repositories
     Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryLocal(
