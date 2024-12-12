@@ -1,6 +1,7 @@
 import 'package:newsletter/src/data/models/newsletter/newsletter.dart';
 
 class NewsletterLocal extends NewsletterModel {
+  final int? id;
   final String? remote;
 
   const NewsletterLocal(
@@ -9,10 +10,12 @@ class NewsletterLocal extends NewsletterModel {
       required super.summary,
       required super.link,
       required super.createdAt,
-      required this.remote});
+      required this.remote,
+      this.id});
 
   NewsletterLocal.fromJson({required Map<String, dynamic> json})
       : remote = json['remote'],
+        id = json['id'],
         super(
           title: json['title'],
           category: json['category'],
