@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:newsletter/src/core/config/databases/firebase_config.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_hybrid.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_hybrid_impl.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_local.dart';
+import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_remote.dart';
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_create_use_case.dart';
@@ -26,7 +28,8 @@ class HybridBindings extends Bindings {
         dbPath: SQLiteConfig.dbPath,
         dbVersion: SQLiteConfig.dbVersion,
         onCreate: SQLiteConfig.onCreate));
-    Get.lazyPut<NewsletterServiceRemote>(() => NewsletterServiceFirebase());
+    Get.lazyPut<NewsletterServiceRemote>(() =>
+        NewsletterServiceFirebase(collectionPath: FirebaseConfig.collection));
 
     // Repositories
     Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryHybridImpl(
@@ -58,6 +61,24 @@ class LocalBindings extends Bindings {
     // Repositories
     Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryLocal(
           newsletterServiceLocal: Get.find(),
+        ));
+
+    // Shared Use Cases
+    _sharedDependencies();
+  }
+}
+
+// Bindings for Remote Providers
+class RemoteBindings extends Bindings {
+  @override
+  void dependencies() {
+    // Services
+    Get.lazyPut<NewsletterServiceRemote>(() =>
+        NewsletterServiceFirebase(collectionPath: FirebaseConfig.collection));
+
+    // Repositories
+    Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryRemote(
+          newsletterServiceRemote: Get.find(),
         ));
 
     // Shared Use Cases

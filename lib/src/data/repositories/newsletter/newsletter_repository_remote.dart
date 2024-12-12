@@ -11,7 +11,7 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
 
   NewsletterRepositoryRemote({required this.newsletterServiceRemote})
       : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
-            [] as Result<List<Newsletter>>));
+            const Result.ok([])));
 
   @override
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {

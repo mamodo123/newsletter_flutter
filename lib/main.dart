@@ -6,7 +6,9 @@ import 'package:newsletter/src/core/routing/routes.dart';
 import 'package:newsletter/src/core/themes/theme.dart';
 
 import 'firebase_options.dart';
-import 'main_development.dart' as development;
+import 'main_development_remote.dart' as development_remote;
+
+// import 'main_development.dart' as development;
 // import 'main_staging.dart' as staging;
 
 void main() async {
@@ -14,7 +16,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  development.main();
+
+  development_remote.main();
 }
 
 class MainApp extends StatelessWidget {
