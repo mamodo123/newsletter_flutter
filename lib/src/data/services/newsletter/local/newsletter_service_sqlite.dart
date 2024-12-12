@@ -17,7 +17,7 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
 
   Future<void> loadNewsletters() async {
     final db = await SQLiteHelper.getDatabase(
-        SQliteConfig.dbPath, SQliteConfig.dbVersion, SQliteConfig.onCreate);
+        SQLiteConfig.dbPath, SQLiteConfig.dbVersion, SQLiteConfig.onCreate);
     final newsletterDBReturn =
         await SQLiteHelper.runSelectSql('select * from $table', db, []);
     final newsletterMap = newsletterDBReturn
@@ -29,7 +29,7 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
   @override
   Future<void> addNewsletter(NewsletterLocal newsletter) async {
     final db = await SQLiteHelper.getDatabase(
-        SQliteConfig.dbPath, SQliteConfig.dbVersion, SQliteConfig.onCreate);
+        SQLiteConfig.dbPath, SQLiteConfig.dbVersion, SQLiteConfig.onCreate);
     try {
       await SQLiteHelper.runInsertSql(table, newsletter.toJson(), db);
       subject.add(List.unmodifiable([...subject.value, newsletter]));

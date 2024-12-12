@@ -1,4 +1,4 @@
-abstract class SQliteConfig {
+abstract class SQLiteConfig {
   static const dbPath = 'newsletter.db';
   static const dbVersion = 1;
 
