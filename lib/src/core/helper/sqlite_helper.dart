@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SQLiteHelper {
+abstract class SQLiteHelper {
   static Future<Database> getDatabase(
       String databasePath, int version, List<String> onCreate) async {
     final databasesPath = await getDatabasesPath();
