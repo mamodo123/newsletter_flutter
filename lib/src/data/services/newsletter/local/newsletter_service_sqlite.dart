@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:newsletter/src/core/helper/db_helper.dart';
+import 'package:newsletter/src/core/helper/sqlite_helper.dart';
 import 'package:newsletter/src/data/models/newsletter/newsletter_local.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../../core/config/db_config.dart';
+import '../../../../core/config/sqlite_config.dart';
 import 'newsletter_service_local.dart';
 
 class NewsletterServiceSqlite extends NewsletterServiceLocal {
@@ -16,10 +16,10 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
   }
 
   Future<void> loadNewsletters() async {
-    final db = await DBHelper.getDatabase(
-        DBConfig.dbPath, DBConfig.dbVersion, DBConfig.onCreate);
+    final db = await SQLiteHelper.getDatabase(
+        SQliteConfig.dbPath, SQliteConfig.dbVersion, SQliteConfig.onCreate);
     final newsletterDBReturn =
-        await DBHelper.runSelectSql('select * from $table', db, []);
+        await SQLiteHelper.runSelectSql('select * from $table', db, []);
     final newsletterMap = newsletterDBReturn
         .map((e) => NewsletterLocal.fromJson(json: e))
         .toList();
@@ -28,10 +28,10 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
 
   @override
   Future<void> addNewsletter(NewsletterLocal newsletter) async {
-    final db = await DBHelper.getDatabase(
-        DBConfig.dbPath, DBConfig.dbVersion, DBConfig.onCreate);
+    final db = await SQLiteHelper.getDatabase(
+        SQliteConfig.dbPath, SQliteConfig.dbVersion, SQliteConfig.onCreate);
     try {
-      await DBHelper.runInsertSql(table, newsletter.toJson(), db);
+      await SQLiteHelper.runInsertSql(table, newsletter.toJson(), db);
       subject.add(List.unmodifiable([...subject.value, newsletter]));
     } finally {
       await db.close();
