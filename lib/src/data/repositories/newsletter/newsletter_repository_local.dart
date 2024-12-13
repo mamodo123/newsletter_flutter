@@ -24,12 +24,6 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
               ))
           .toList()));
     });
-
-    @override
-    void dispose() {
-      newsletterServiceLocal.dispose();
-      super.dispose();
-    }
   }
 
   @override
@@ -51,7 +45,8 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
   }
 
   @override
-  Stream<Result<List<Newsletter>>> getNewsletterStream() {
-    return subject.stream;
+  void dispose() {
+    newsletterServiceLocal.dispose();
+    super.dispose();
   }
 }

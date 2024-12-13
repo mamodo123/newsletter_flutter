@@ -45,7 +45,7 @@ class NewsletterViewModel extends GetxController {
 
   Future<void> _listenToNewsletterStream() async {
     _newsletterStreamSubscription =
-        _newsletterRepository.getNewsletterStream().listen((result) {
+        _newsletterRepository.stream.listen((result) {
       switch (result) {
         case Ok():
           newsletters.assignAll(result.value);

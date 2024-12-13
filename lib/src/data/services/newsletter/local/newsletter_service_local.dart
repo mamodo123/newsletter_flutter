@@ -12,6 +12,13 @@ abstract class NewsletterServiceLocal {
 
   Future<void> addNewsletter(NewsletterLocal newsletter);
 
+  Future<void> addOrUpdateNewsletterList(List<NewsletterLocal> newsletterList);
+
+  Future<List<NewsletterLocal>> getNonSynchronized();
+
+  Future<void> updateNewsletterRemote(
+      {required String uuid, required String remoteId});
+
   void dispose() {
     subject.close();
   }

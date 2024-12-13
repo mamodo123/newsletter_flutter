@@ -27,6 +27,7 @@ class HybridBindings extends Bindings {
         dbPath: SQLiteConfig.dbPath,
         dbVersion: SQLiteConfig.dbVersion,
         onCreate: SQLiteConfig.onCreate));
+
     Get.lazyPut<NewsletterServiceRemote>(() =>
         NewsletterServiceFirebase(collectionPath: FirebaseConfig.collection));
 

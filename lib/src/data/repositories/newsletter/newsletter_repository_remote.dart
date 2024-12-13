@@ -11,7 +11,20 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
 
   NewsletterRepositoryRemote({required this.newsletterServiceRemote})
       : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
-            const Result.ok([])));
+            const Result.ok([]))) {
+    newsletterServiceRemote.getNewsletterStream().listen((newsletterList) {
+      subject.add(Result.ok(newsletterList
+          .map<Newsletter>((e) => Newsletter(
+                title: e.title,
+                category: e.category,
+                summary: e.summary,
+                link: e.link,
+                createdAt: e.createdAt,
+                uuid: e.uuid,
+              ))
+          .toList()));
+    });
+  }
 
   @override
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {
@@ -23,28 +36,12 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
         link: newsletter.link,
         createdAt: newsletter.createdAt,
         uuid: newsletter.uuid,
+        remoteId: null
       ));
       return const Result.ok(null);
     } on Exception catch (error) {
       return Result.error(error);
     }
-  }
-
-  @override
-  Stream<Result<List<Newsletter>>> getNewsletterStream() {
-    return newsletterServiceRemote.getNewsletterStream().map((newsletterList) {
-      return Result.ok(newsletterList
-          .map((e) => Newsletter(
-              title: e.title,
-              category: e.category,
-              summary: e.summary,
-              link: e.link,
-              createdAt: e.createdAt,
-              uuid: e.uuid))
-          .toList());
-    }).handleError((error) {
-      return Result.error(error);
-    });
   }
 
   @override

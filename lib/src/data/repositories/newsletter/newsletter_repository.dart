@@ -6,9 +6,9 @@ import '../../../domain/entities/newsletter.dart';
 abstract class NewsletterRepository {
   final BehaviorSubject<Result<List<Newsletter>>> subject;
 
-  NewsletterRepository(this.subject);
+  Stream<Result<List<Newsletter>>> get stream => subject.stream;
 
-  Stream<Result<List<Newsletter>>> getNewsletterStream();
+  NewsletterRepository(this.subject);
 
   Future<Result<void>> createNewsletter(Newsletter newsletter);
 

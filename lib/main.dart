@@ -4,13 +4,13 @@ import 'package:newsletter/src/core/routing/router.dart';
 import 'package:newsletter/src/core/routing/routes.dart';
 import 'package:newsletter/src/core/themes/theme.dart';
 
-import 'main_development_remote.dart' as development_remote;
+// import 'main_development_remote.dart' as development_remote;
 
 // import 'main_development.dart' as development;
-// import 'main_staging.dart' as staging;
+import 'main_staging.dart' as staging;
 
 void main() {
-  development_remote.main();
+  staging.main();
 }
 
 class MainApp extends StatelessWidget {

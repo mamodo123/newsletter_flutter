@@ -27,7 +27,8 @@ abstract class SQLiteHelper {
     Map<String, Object?> items,
     Database db,
   ) async {
-    return await db.insert(table, items);
+    return await db.insert(table, items,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<int> runUpdateSql(

@@ -7,15 +7,17 @@ abstract class FirebaseHelper {
     return firestoreInstance.collection(collectionPath).snapshots();
   }
 
-  static Future<void> insertDocument(
+  static Future<DocumentReference<Map<String, dynamic>>> insertDocument(
       String collectionPath, Map<String, dynamic> data,
       {String? documentId}) async {
     final firestoreInstance = FirebaseFirestore.instance;
     final collection = firestoreInstance.collection(collectionPath);
     if (documentId == null) {
-      await collection.add(data);
+      return await collection.add(data);
     } else {
-      await collection.doc(documentId).set(data);
+      final doc = collection.doc(documentId);
+      await doc.set(data);
+      return doc;
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -32,5 +33,32 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
   Future<void> addNewsletter(NewsletterLocal newsletter) async {
     _items.add(newsletter);
     subject.add(List.unmodifiable(_items));
+  }
+
+  @override
+  Future<void> addOrUpdateNewsletterList(
+      List<NewsletterLocal> newsletterList) async {
+    _items.assignAll(newsletterList);
+    subject.add(newsletterList);
+  }
+
+  @override
+  Future<List<NewsletterLocal>> getNonSynchronized() async {
+    return _items.where((e) => e.remote == null).toList();
+  }
+
+  @override
+  Future<void> updateNewsletterRemote(
+      {required String uuid, required String remoteId}) async {
+    final itemIndex = _items.indexWhere((e) => e.uuid == uuid);
+    final item = _items[itemIndex];
+    _items[itemIndex] = NewsletterLocal(
+        title: item.title,
+        category: item.category,
+        summary: item.summary,
+        link: item.link,
+        createdAt: item.createdAt,
+        uuid: item.uuid,
+        remote: remoteId);
   }
 }

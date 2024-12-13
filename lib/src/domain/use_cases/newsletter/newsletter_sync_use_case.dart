@@ -8,11 +8,17 @@ class NewsletterSyncUseCase {
 
   final NewsletterRepositoryHybrid _newsletterRepository;
 
-  Future<Result<void>> execute() async {
+  Future<Result<void>> onConnect() async {
     try {
-      return await _newsletterRepository.syncLocalAndRemote();
-    } on Exception catch (error) {
-      return Result.error(error);
+      await _newsletterRepository.syncRemoteWithLocal();
+      await _newsletterRepository.connectToRemote();
+      return Result.ok(null);
+    } on Exception catch (e) {
+      return Result.error(e);
     }
+  }
+
+  Future<Result<void>> onDisconnect() async {
+    return await _newsletterRepository.disconnectFromRemote();
   }
 }

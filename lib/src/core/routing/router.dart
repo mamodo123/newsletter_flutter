@@ -4,6 +4,7 @@ import 'package:newsletter/src/core/routing/routes.dart';
 import '../../presentation/newsletter/screens/newsletter_create_screen.dart';
 import '../../presentation/newsletter/screens/newsletter_list_screen.dart';
 import '../../presentation/newsletter/screens/newsletter_screen.dart';
+import '../../presentation/newsletter/view_models/newsletter_internet_view_model.dart';
 import '../../presentation/newsletter/view_models/newsletter_view_model.dart';
 
 List<GetPage> appRoutes = [
@@ -15,6 +16,11 @@ List<GetPage> appRoutes = [
         NewsletterViewModel(
           newsletterCreateUseCase: Get.find(),
           newsletterRepository: Get.find(),
+        ),
+      );
+      Get.put(
+        NewsletterInternetViewModel(
+          newsletterSyncUseCase: Get.find(),
         ),
       );
     }),
