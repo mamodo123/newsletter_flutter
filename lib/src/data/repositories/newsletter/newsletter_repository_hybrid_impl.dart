@@ -115,7 +115,8 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
                 link: newsletter.link,
                 createdAt: newsletter.createdAt,
                 uuid: newsletter.uuid,
-                remoteId: null));
+                remoteId: null),
+            notify: false);
 
         switch (remoteIdResult) {
           case Ok():

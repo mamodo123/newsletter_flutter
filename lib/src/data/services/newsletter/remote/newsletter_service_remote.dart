@@ -11,7 +11,8 @@ abstract class NewsletterServiceRemote {
 
   Stream<List<NewsletterRemote>> getNewsletterStream();
 
-  Future<Result<String>> addNewsletter(NewsletterRemote newsletter);
+  Future<Result<String>> addNewsletter(NewsletterRemote newsletter,
+      {bool notify});
 
   Future<Result<void>> connect();
 
