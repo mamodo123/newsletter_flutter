@@ -12,7 +12,7 @@ class NewsletterServiceFirebase extends NewsletterServiceRemote {
   StreamSubscription? collectionStream;
 
   NewsletterServiceFirebase({required this.collectionPath})
-      : super(BehaviorSubject<List<NewsletterRemote>>.seeded([])) {
+      : super(BehaviorSubject<List<NewsletterRemote>>()) {
     connect();
   }
 

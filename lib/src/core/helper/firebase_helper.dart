@@ -1,4 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import '../../../firebase_options.dart';
+import 'fcm_helper.dart';
 
 abstract class FirebaseHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getCollectionStream(
@@ -28,5 +32,15 @@ abstract class FirebaseHelper {
         .collection(collectionPath)
         .doc(documentId)
         .update(data);
+  }
+
+  static Future<void> initFirebase() async {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+      await FCMHelper.initNotifications();
+    }
   }
 }

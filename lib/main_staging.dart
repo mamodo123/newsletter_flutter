@@ -1,19 +1,16 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:newsletter/src/core/config/dependencies.dart';
-import 'package:newsletter/src/core/helper/fcm_helper.dart';
+import 'package:newsletter/src/core/helper/firebase_helper.dart';
 
-import 'firebase_options.dart';
 import 'main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  await FCMHelper.initNotifications();
+  if (await InternetConnection().hasInternetAccess) {
+    await FirebaseHelper.initFirebase();
+  }
 
   HybridBindings().dependencies();
 

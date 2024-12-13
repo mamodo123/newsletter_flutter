@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:newsletter/src/core/utils/result.dart';
@@ -11,11 +13,18 @@ import 'newsletter_repository_hybrid.dart';
 class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
   final NewsletterServiceLocal newsletterServiceLocal;
 
+  late final StreamSubscription<List<NewsletterLocal>>
+      newsletterLocalStreamSubscription;
+  StreamSubscription<List<NewsletterRemote>>?
+      newsletterRemoteLocalStreamSubscription;
+
   NewsletterRepositoryHybridImpl(
       {required this.newsletterServiceLocal,
       required super.newsletterServiceRemote})
       : super() {
-    newsletterServiceLocal.getNewsletterStream().listen((newsletterList) async {
+    newsletterLocalStreamSubscription = newsletterServiceLocal
+        .getNewsletterStream()
+        .listen((newsletterList) async {
       subject.add(Result.ok(newsletterList
           .map<Newsletter>((e) => Newsletter(
                 title: e.title,
@@ -28,19 +37,7 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
           .toList()));
     });
 
-    newsletterServiceRemote.getNewsletterStream().listen((newsletterList) {
-      syncLocalWithList(newsletterList
-          .map((e) => NewsletterLocal(
-                title: e.title,
-                category: e.category,
-                summary: e.summary,
-                link: e.link,
-                createdAt: e.createdAt,
-                uuid: e.uuid,
-                remote: e.remoteId,
-              ))
-          .toList());
-    });
+    connectToRemote();
   }
 
   @override
@@ -75,12 +72,33 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
 
   @override
   Future<Result<void>> connectToRemote() async {
+    newsletterRemoteLocalStreamSubscription =
+        newsletterServiceRemote.getNewsletterStream().listen((newsletterList) {
+      syncLocalWithList(newsletterList
+          .map((e) => NewsletterLocal(
+                title: e.title,
+                category: e.category,
+                summary: e.summary,
+                link: e.link,
+                createdAt: e.createdAt,
+                uuid: e.uuid,
+                remote: e.remoteId,
+              ))
+          .toList());
+    });
     return await newsletterServiceRemote.connect();
   }
 
   @override
   Future<Result<void>> disconnectFromRemote() async {
-    return await newsletterServiceRemote.disconnect();
+    try {
+      await newsletterServiceRemote.disconnect();
+      newsletterRemoteLocalStreamSubscription?.cancel();
+      newsletterRemoteLocalStreamSubscription = null;
+      return Result.ok(null);
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
   }
 
   @override
@@ -121,8 +139,10 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
   @override
   Future<Result<void>> syncLocalWithList(
       List<NewsletterLocal> newsletterList) async {
+    print('AAAAAAAA');
+    print(newsletterList);
     try {
-      await newsletterServiceLocal.addOrUpdateNewsletterList(newsletterList);
+      await newsletterServiceLocal.updateRemotes(newsletterList);
       return Result.ok(null);
     } on Exception catch (e) {
       return Result.error(e);
@@ -133,6 +153,8 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
   void dispose() {
     newsletterServiceLocal.dispose();
     newsletterServiceRemote.dispose();
+    newsletterLocalStreamSubscription.cancel();
+    newsletterRemoteLocalStreamSubscription?.cancel();
     super.dispose();
   }
 }

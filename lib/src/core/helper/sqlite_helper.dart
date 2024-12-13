@@ -31,6 +31,15 @@ abstract class SQLiteHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  static Future<int> runDelete(
+    String table,
+    String where,
+    List<dynamic> whereArgs,
+    Database db,
+  ) async {
+    return await db.delete(table, where: where, whereArgs: whereArgs);
+  }
+
   static Future<int> runUpdateSql(
       String sql, Database db, List<Object> arguments) async {
     return await db.rawUpdate(sql, arguments);

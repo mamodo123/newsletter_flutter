@@ -12,7 +12,7 @@ abstract class NewsletterServiceLocal {
 
   Future<void> addNewsletter(NewsletterLocal newsletter);
 
-  Future<void> addOrUpdateNewsletterList(List<NewsletterLocal> newsletterList);
+  Future<void> updateRemotes(List<NewsletterLocal> newsletterList);
 
   Future<List<NewsletterLocal>> getNonSynchronized();
 

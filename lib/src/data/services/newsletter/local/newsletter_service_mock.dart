@@ -20,7 +20,7 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
   );
 
   NewsletterServiceMock()
-      : super(BehaviorSubject<List<NewsletterLocal>>.seeded([])) {
+      : super(BehaviorSubject<List<NewsletterLocal>>()) {
     subject.add(List.unmodifiable(_items));
   }
 
@@ -36,7 +36,7 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
   }
 
   @override
-  Future<void> addOrUpdateNewsletterList(
+  Future<void> updateRemotes(
       List<NewsletterLocal> newsletterList) async {
     _items.assignAll(newsletterList);
     subject.add(newsletterList);

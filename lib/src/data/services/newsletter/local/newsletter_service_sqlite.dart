@@ -16,7 +16,7 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
 
   NewsletterServiceSqlite(
       {required this.dbPath, required this.dbVersion, required this.onCreate})
-      : super(BehaviorSubject<List<NewsletterLocal>>.seeded([])) {
+      : super(BehaviorSubject<List<NewsletterLocal>>()) {
     loadNewsletters();
   }
 
@@ -59,11 +59,12 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
   }
 
   @override
-  Future<void> addOrUpdateNewsletterList(
+  Future<void> updateRemotes(
       List<NewsletterLocal> newsletterList) async {
     final db = await SQLiteHelper.getDatabase(
         SQLiteConfig.dbPath, SQLiteConfig.dbVersion, SQLiteConfig.onCreate);
     try {
+      await SQLiteHelper.runDelete(table, 'remote is not null', [], db);
       for (final newsletter in newsletterList) {
         await SQLiteHelper.runInsertSql(table, newsletter.toJson(), db);
       }
@@ -80,9 +81,7 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
         SQLiteConfig.dbPath, SQLiteConfig.dbVersion, SQLiteConfig.onCreate);
     try {
       await SQLiteHelper.runUpdateSql(
-          'update $table set remote = ? where uuid = ?',
-          db,
-          [remoteId, uuid]);
+          'update $table set remote = ? where uuid = ?', db, [remoteId, uuid]);
     } finally {
       await db.close();
     }
