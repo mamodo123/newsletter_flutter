@@ -17,8 +17,13 @@ class NewsletterListWidget extends StatelessWidget {
       );
     }
     return ListView.builder(
-      itemCount: newsletterList.length,
+      itemCount: newsletterList.length + 1,
       itemBuilder: (context, index) {
+        if (index == newsletterList.length) {
+          return const SizedBox(
+            height: 80,
+          );
+        }
         var newsletter = newsletterList[index];
         return Card(
           margin: const EdgeInsets.all(8.0),
