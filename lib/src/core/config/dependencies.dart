@@ -16,7 +16,10 @@ import '../../data/services/newsletter/remote/newsletter_service_firebase.dart';
 import 'databases/sqlite_config.dart';
 
 // Shared Dependencies
-void _sharedDependencies() {}
+void _sharedDependencies() {
+  Get.lazyPut<bool>(
+      () => Get.find<NewsletterRepository>() is NewsletterRepositoryHybrid);
+}
 
 // Bindings for Hybrid Providers
 class HybridBindings extends Bindings {
@@ -37,9 +40,6 @@ class HybridBindings extends Bindings {
           newsletterServiceRemote: Get.find(),
         ));
 
-    // Shared Use Cases
-    _sharedDependencies();
-
     Get.lazyPut<NewsletterCreateUseCase>(() => NewsletterCreateUseCaseRemote(
         newsletterRepository:
             Get.find<NewsletterRepository>() as NewsletterRepositoryRemote));
@@ -49,6 +49,9 @@ class HybridBindings extends Bindings {
           newsletterRepository:
               Get.find<NewsletterRepository>() as NewsletterRepositoryHybrid,
         ));
+
+    // Shared Use Cases
+    _sharedDependencies();
   }
 }
 
@@ -67,11 +70,11 @@ class LocalBindings extends Bindings {
           newsletterServiceLocal: Get.find(),
         ));
 
-    // Shared Use Cases
-    _sharedDependencies();
-
     Get.lazyPut<NewsletterCreateUseCase>(
         () => NewsletterCreateUseCase(newsletterRepository: Get.find()));
+
+    // Shared Use Cases
+    _sharedDependencies();
   }
 }
 
@@ -88,11 +91,11 @@ class RemoteBindings extends Bindings {
           newsletterServiceRemote: Get.find(),
         ));
 
-    // Shared Use Cases
-    _sharedDependencies();
-
     Get.lazyPut<NewsletterCreateUseCase>(() => NewsletterCreateUseCaseRemote(
         newsletterRepository:
             Get.find<NewsletterRepository>() as NewsletterRepositoryRemote));
+
+    // Shared Use Cases
+    _sharedDependencies();
   }
 }

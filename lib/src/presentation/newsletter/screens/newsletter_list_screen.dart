@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:newsletter/src/presentation/newsletter/view_models/newsletter_internet_view_model.dart';
 import 'package:newsletter/src/presentation/newsletter/view_models/newsletter_view_model.dart';
 import 'package:newsletter/src/presentation/widgets/scaffold.dart';
 
 import '../../../core/routing/routes.dart';
+import '../../widgets/connection_state.dart';
+import '../../widgets/newsletter_list_widget.dart';
 
 class NewsletterListScreen extends StatelessWidget {
   const NewsletterListScreen({super.key});
@@ -12,43 +15,41 @@ class NewsletterListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyScaffold(
       title: 'Newsletter List',
-      body: GetBuilder<NewsletterViewModel>(
-        builder: (controller) {
-          return Obx(
-            () {
-              if (controller.newsletters.isEmpty) {
-                return const Center(
-                  child: Text('There are no registered newsletters yet'),
-                );
-              }
-              return ListView.builder(
-                itemCount: controller.newsletters.length,
-                itemBuilder: (context, index) {
-                  var newsletter = controller.newsletters[index];
-                  return Card(
-                    margin: const EdgeInsets.all(8.0),
-                    elevation: 4.0,
-                    child: ListTile(
-                      title: Text(newsletter.title),
-                      subtitle: Text(newsletter.summary),
-                      onTap: () {
-                        Get.toNamed(Routes.seeNewsletter,
-                            arguments: newsletter);
-                      },
-                    ),
+      body: Builder(builder: (context) {
+        final isHybrid = Get.find<bool>();
+        return Column(
+          children: [
+            if (isHybrid)
+              GetBuilder<NewsletterInternetViewModel>(
+                  builder: (internetController) {
+                return Obx(() => ConnectionStateWidget(
+                      connectionState: internetController.connectionState.value,
+                    ));
+              }),
+            Expanded(
+              child: GetBuilder<NewsletterViewModel>(
+                builder: (controller) {
+                  return Obx(
+                    () {
+                      return NewsletterListWidget(
+                        newsletterList: controller.newsletters,
+                      );
+                    },
                   );
                 },
-              );
-            },
-          );
-        },
-      ),
+              ),
+            ),
+          ],
+        );
+      }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Get.toNamed(Routes.createNewsletter);
-        },
+        onPressed: _goToCreateNewsletterScreen,
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> _goToCreateNewsletterScreen() async {
+    await Get.toNamed(Routes.createNewsletter);
   }
 }

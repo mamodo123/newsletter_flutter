@@ -18,11 +18,13 @@ List<GetPage> appRoutes = [
           newsletterRepository: Get.find(),
         ),
       );
-      Get.put(
-        NewsletterInternetViewModel(
-          newsletterSyncUseCase: Get.find(),
-        ),
-      );
+      if (Get.find<bool>()) {
+        Get.put(
+          NewsletterInternetViewModel(
+            newsletterSyncUseCase: Get.find(),
+          ),
+        );
+      }
     }),
     children: [
       GetPage(
