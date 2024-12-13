@@ -6,7 +6,8 @@ class NewsletterRemote extends NewsletterModel {
       required super.category,
       required super.summary,
       required super.link,
-      required super.createdAt});
+      required super.createdAt,
+      required super.uuid});
 
   NewsletterRemote.fromJson({required Map<String, dynamic> json})
       : super(
@@ -15,6 +16,7 @@ class NewsletterRemote extends NewsletterModel {
           summary: json['summary'],
           link: json['link'],
           createdAt: json['createdAt'].toDate(),
+          uuid: json['uuid'],
         );
 
 // @override

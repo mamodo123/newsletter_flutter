@@ -25,7 +25,9 @@ class NewsletterServiceFirebase extends NewsletterServiceRemote {
   Future<void> addNewsletter(NewsletterRemote newsletter) async {
     final data = newsletter.toJson();
     await FirebaseHelper.insertDocument(collectionPath, data);
-    subject.add(List.unmodifiable([...subject.value, newsletter]));
+    if (!subject.value.map((e) => e.uuid).contains(newsletter.uuid)) {
+      subject.add(List.unmodifiable([...subject.value, newsletter]));
+    }
   }
 
   @override

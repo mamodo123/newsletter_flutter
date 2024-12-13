@@ -10,6 +10,7 @@ class NewsletterLocal extends NewsletterModel {
       required super.summary,
       required super.link,
       required super.createdAt,
+      required super.uuid,
       required this.remote,
       this.id});
 
@@ -17,12 +18,12 @@ class NewsletterLocal extends NewsletterModel {
       : remote = json['remote'],
         id = json['id'],
         super(
-          title: json['title'],
-          category: json['category'],
-          summary: json['summary'],
-          link: json['link'],
-          createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
-        );
+            title: json['title'],
+            category: json['category'],
+            summary: json['summary'],
+            link: json['link'],
+            createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+            uuid: json['uuid']);
 
   @override
   Map<String, dynamic> toJson() => {...super.toJson(), 'remote': remote}

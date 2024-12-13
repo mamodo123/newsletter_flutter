@@ -1,4 +1,5 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../models/newsletter/newsletter_local.dart';
 import 'newsletter_service_local.dart';
@@ -13,6 +14,7 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
       link: 'Teste $index',
       createdAt: DateTime.now(),
       remote: null,
+      uuid: Uuid().v4(),
     ),
   );
 
@@ -31,5 +33,4 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
     _items.add(newsletter);
     subject.add(List.unmodifiable(_items));
   }
-
 }

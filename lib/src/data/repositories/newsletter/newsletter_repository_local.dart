@@ -20,6 +20,7 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
                 summary: e.summary,
                 link: e.link,
                 createdAt: e.createdAt,
+                uuid: e.uuid,
               ))
           .toList()));
     });
@@ -40,6 +41,7 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
         summary: newsletter.summary,
         link: newsletter.link,
         createdAt: newsletter.createdAt,
+        uuid: newsletter.uuid,
         remote: null,
       ));
       return const Result.ok(null);

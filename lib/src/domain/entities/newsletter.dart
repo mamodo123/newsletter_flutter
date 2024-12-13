@@ -1,5 +1,5 @@
 class Newsletter {
-  final String title, category, summary, link;
+  final String title, category, summary, link, uuid;
   final DateTime createdAt;
 
   Newsletter(
@@ -7,5 +7,6 @@ class Newsletter {
       required this.category,
       required this.summary,
       required this.link,
-      required this.createdAt});
+      required this.createdAt,
+      required this.uuid});
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newsletter/src/domain/entities/newsletter.dart';
 import 'package:newsletter/src/presentation/widgets/scaffold.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/utils/validators.dart';
 import '../view_models/newsletter_view_model.dart';
@@ -127,6 +128,7 @@ class _NewsletterCreateScreenState extends State<NewsletterCreateScreen> {
         summary: summary,
         link: link,
         createdAt: DateTime.now(),
+        uuid: Uuid().v4(),
       );
       await controller.createNewsletter.execute(newsletter);
       if (controller.createNewsletter.error) {

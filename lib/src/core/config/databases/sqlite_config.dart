@@ -10,6 +10,7 @@ abstract class SQLiteConfig {
       summary TEXT NOT NULL,
       link TEXT NOT NULL,
       createdAt DATETIME NOT NULL,
+      uuid TEXT NOT NULL,
       remote TEXT
     );"""
   ];

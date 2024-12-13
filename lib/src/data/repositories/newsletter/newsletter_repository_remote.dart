@@ -17,11 +17,13 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {
     try {
       await newsletterServiceRemote.addNewsletter(NewsletterRemote(
-          title: newsletter.title,
-          category: newsletter.category,
-          summary: newsletter.summary,
-          link: newsletter.link,
-          createdAt: newsletter.createdAt));
+        title: newsletter.title,
+        category: newsletter.category,
+        summary: newsletter.summary,
+        link: newsletter.link,
+        createdAt: newsletter.createdAt,
+        uuid: newsletter.uuid,
+      ));
       return const Result.ok(null);
     } on Exception catch (error) {
       return Result.error(error);
@@ -37,7 +39,8 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
               category: e.category,
               summary: e.summary,
               link: e.link,
-              createdAt: e.createdAt))
+              createdAt: e.createdAt,
+              uuid: e.uuid))
           .toList());
     }).handleError((error) {
       return Result.error(error);

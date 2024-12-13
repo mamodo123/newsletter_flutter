@@ -1,5 +1,5 @@
 class NewsletterModel {
-  final String title, category, summary, link;
+  final String title, category, summary, link, uuid;
   final DateTime createdAt;
 
   const NewsletterModel(
@@ -7,14 +7,16 @@ class NewsletterModel {
       required this.category,
       required this.summary,
       required this.link,
-      required this.createdAt});
+      required this.createdAt,
+      required this.uuid});
 
   NewsletterModel.fromJson({required Map<String, dynamic> json})
       : title = json['title'],
         category = json['category'],
         summary = json['summary'],
         link = json['link'],
-        createdAt = json['createdAt'];
+        createdAt = json['createdAt'],
+        uuid = json['uuid'];
 
   Map<String, dynamic> toJson() => {
         'title': title,
@@ -22,5 +24,6 @@ class NewsletterModel {
         'summary': summary,
         'link': link,
         'createdAt': createdAt,
+        'uuid': uuid
       };
 }
