@@ -139,8 +139,6 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
   @override
   Future<Result<void>> syncLocalWithList(
       List<NewsletterLocal> newsletterList) async {
-    print('AAAAAAAA');
-    print(newsletterList);
     try {
       await newsletterServiceLocal.updateRemotes(newsletterList);
       return Result.ok(null);
