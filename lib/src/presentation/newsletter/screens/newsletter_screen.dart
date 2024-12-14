@@ -16,15 +16,7 @@ class NewsletterDetailsScreen extends StatelessWidget {
     }
 
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Unable to open link'),
-        ));
-      }
-    }
+    await launchUrl(uri);
   }
 
   @override
