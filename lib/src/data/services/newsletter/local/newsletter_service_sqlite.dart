@@ -59,12 +59,23 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
   }
 
   @override
-  Future<void> updateRemotes(
-      List<NewsletterLocal> newsletterList) async {
+  Future<void> updateRemotes(List<NewsletterLocal> newsletterList) async {
     final db = await SQLiteHelper.getDatabase(
         SQLiteConfig.dbPath, SQLiteConfig.dbVersion, SQLiteConfig.onCreate);
     try {
-      await SQLiteHelper.runDelete(table, 'remote is not null', [], db);
+      final validRemotes = newsletterList
+          .map((e) => e.remote!)
+          .where((e) => e.isNotEmpty)
+          .toList();
+      if (validRemotes.isNotEmpty) {
+        final placeholders = List.filled(validRemotes.length, '?').join(', ');
+        await SQLiteHelper.runDelete(
+          table,
+          'remote IS NOT NULL AND remote NOT IN ($placeholders)',
+          validRemotes,
+          db,
+        );
+      }
       for (final newsletter in newsletterList) {
         await SQLiteHelper.runInsertSql(table, newsletter.toJson(), db);
       }

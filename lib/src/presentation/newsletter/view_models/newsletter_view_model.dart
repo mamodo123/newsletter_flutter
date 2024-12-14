@@ -60,6 +60,7 @@ class NewsletterViewModel extends GetxController {
         loading.value = false;
         switch (result) {
           case Ok():
+            print(result.value.length);
             newsletters.assignAll(result.value);
             break;
           case Error():
