@@ -34,6 +34,9 @@ class NewsletterServiceFirebase extends NewsletterServiceRemote {
 
   @override
   Future<Result<void>> connect() async {
+    if (collectionStream != null) {
+      return Result.ok(null);
+    }
     try {
       collectionStream =
           FirebaseHelper.getCollectionStream(collectionPath).listen((data) {
