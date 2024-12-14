@@ -27,17 +27,20 @@ class NewsletterListScreen extends StatelessWidget {
                     ));
               }),
             Expanded(
-              child: GetBuilder<NewsletterViewModel>(
-                builder: (controller) {
-                  return Obx(
-                    () {
-                      return NewsletterListWidget(
+              child: GetBuilder<NewsletterViewModel>(builder: (controller) {
+                return controller.loading.value
+                    ? Center(
+                        child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          Text('Loading newsletter'),
+                        ],
+                      ))
+                    : NewsletterListWidget(
                         newsletterList: controller.newsletters,
                       );
-                    },
-                  );
-                },
-              ),
+              }),
             ),
           ],
         );

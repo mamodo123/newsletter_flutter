@@ -11,7 +11,7 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
 
   NewsletterRepositoryRemote({required this.newsletterServiceRemote})
       : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
-            const Result.ok([]))) {
+            const Result.loading())) {
     newsletterServiceRemote.getNewsletterStream().listen((newsletterList) {
       subject.add(Result.ok(newsletterList
           .map<Newsletter>((e) => Newsletter(
@@ -30,14 +30,13 @@ class NewsletterRepositoryRemote extends NewsletterRepository {
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {
     try {
       await newsletterServiceRemote.addNewsletter(NewsletterRemote(
-        title: newsletter.title,
-        category: newsletter.category,
-        summary: newsletter.summary,
-        link: newsletter.link,
-        createdAt: newsletter.createdAt,
-        uuid: newsletter.uuid,
-        remoteId: null
-      ));
+          title: newsletter.title,
+          category: newsletter.category,
+          summary: newsletter.summary,
+          link: newsletter.link,
+          createdAt: newsletter.createdAt,
+          uuid: newsletter.uuid,
+          remoteId: null));
       return const Result.ok(null);
     } on Exception catch (error) {
       return Result.error(error);

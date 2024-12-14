@@ -11,7 +11,7 @@ class NewsletterRepositoryLocal extends NewsletterRepository {
 
   NewsletterRepositoryLocal({required this.newsletterServiceLocal})
       : super(BehaviorSubject<Result<List<Newsletter>>>.seeded(
-            const Result.ok([]))) {
+            const Result.loading())) {
     newsletterServiceLocal.getNewsletterStream().listen((newsletterList) {
       subject.add(Result.ok(newsletterList
           .map<Newsletter>((e) => Newsletter(

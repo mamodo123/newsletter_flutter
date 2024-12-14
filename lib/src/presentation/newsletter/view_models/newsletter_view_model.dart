@@ -17,6 +17,8 @@ class NewsletterViewModel extends GetxController {
 
   final RxList<Newsletter> newsletters = <Newsletter>[].obs;
 
+  final loading = true.obs;
+
   StreamSubscription? _newsletterStreamSubscription;
 
   NewsletterViewModel({
@@ -46,16 +48,22 @@ class NewsletterViewModel extends GetxController {
   Future<void> _listenToNewsletterStream() async {
     _newsletterStreamSubscription =
         _newsletterRepository.stream.listen((result) {
-      switch (result) {
-        case Ok():
-          newsletters.assignAll(result.value);
-          break;
-        case Error():
-          //TODO show error
-          break;
+      if (result is Loading) {
+        loading.value = true;
+      } else {
+        loading.value = false;
+        switch (result) {
+          case Ok():
+            newsletters.assignAll(result.value);
+            break;
+          case Error():
+            //TODO show error
+            break;
+          case Loading():
+            loading.value = true;
+            break;
+        }
       }
-    }, onError: (error) {
-      //TODO show error
     });
   }
 }

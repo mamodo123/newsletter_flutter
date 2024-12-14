@@ -119,6 +119,9 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
             notify: false);
 
         switch (remoteIdResult) {
+          case Loading():
+            //Impossible state
+            break;
           case Ok():
             try {
               await newsletterServiceLocal.updateNewsletterRemote(

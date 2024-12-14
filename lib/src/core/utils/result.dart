@@ -23,6 +23,9 @@ sealed class Result<T> {
 
   /// Creates an error [Result], completed with the specified [error].
   const factory Result.error(Exception error) = Error._;
+
+  /// Creates an loading [Loading].
+  const factory Result.loading() = Loading._;
 }
 
 /// Subclass of Result for values
@@ -45,4 +48,12 @@ final class Error<T> extends Result<T> {
 
   @override
   String toString() => 'Result<$T>.error($error)';
+}
+
+// Subclass of a Loading state
+final class Loading<T> extends Result<T> {
+  const Loading._();
+
+  @override
+  String toString() => 'Result<$T>.Loading()';
 }
