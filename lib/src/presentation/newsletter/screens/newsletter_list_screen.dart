@@ -45,38 +45,34 @@ class _NewsletterListScreenState extends State<NewsletterListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isHybrid = Get.find<bool>();
     return MyScaffold(
       title: 'Newsletter List',
-      body: Builder(builder: (context) {
-        final isHybrid = Get.find<bool>();
-        return Column(
-          children: [
-            if (isHybrid)
-              GetBuilder<NewsletterInternetViewModel>(
-                  builder: (internetController) {
-                return Obx(() => ConnectionStateWidget(
-                      connectionState: internetController.connectionState.value,
-                    ));
-              }),
-            Expanded(
-              child: GetBuilder<NewsletterViewModel>(builder: (controller) {
-                return Obx(() => controller.loading.value
-                    ? Center(
-                        child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(),
-                          Text('Loading newsletter'),
-                        ],
-                      ))
-                    : NewsletterListWidget(
-                        newsletterList: controller.newsletters,
-                      ));
-              }),
-            ),
-          ],
-        );
-      }),
+      actions: [
+        if (isHybrid)
+          GetBuilder<NewsletterInternetViewModel>(
+              builder: (internetController) {
+            return Obx(() => ConnectionStateWidget(
+                  connectionState: internetController.connectionState.value,
+                ));
+          }),
+      ],
+      body: Expanded(
+        child: GetBuilder<NewsletterViewModel>(builder: (controller) {
+          return Obx(() => controller.loading.value
+              ? Center(
+                  child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text('Loading newsletter'),
+                  ],
+                ))
+              : NewsletterListWidget(
+                  newsletterList: controller.newsletters,
+                ));
+        }),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToCreateNewsletterScreen,
         child: const Icon(Icons.add),

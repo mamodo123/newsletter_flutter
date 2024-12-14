@@ -4,12 +4,14 @@ class MyScaffold extends StatefulWidget {
   final Widget body;
   final String title;
   final FloatingActionButton? floatingActionButton;
+  final List<Widget> actions;
 
   const MyScaffold(
       {super.key,
       required this.body,
       required this.title,
-      this.floatingActionButton});
+      this.floatingActionButton,
+      this.actions = const []});
 
   @override
   State<MyScaffold> createState() => _MyScaffoldState();
@@ -25,6 +27,7 @@ class _MyScaffoldState extends State<MyScaffold> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          actions: widget.actions,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

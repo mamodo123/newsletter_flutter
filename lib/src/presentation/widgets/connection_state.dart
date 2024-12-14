@@ -27,7 +27,7 @@ class ConnectionStateWidget extends StatelessWidget {
     final label = stateMap[connectionState]?['label'] as String;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
