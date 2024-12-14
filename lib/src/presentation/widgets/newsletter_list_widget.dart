@@ -11,11 +11,6 @@ class NewsletterListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (newsletterList.isEmpty) {
-      return const Center(
-        child: Text('There are no registered newsletters yet'),
-      );
-    }
     return Obx(() {
       return ListView.builder(
         itemCount: newsletterList.length + 1,

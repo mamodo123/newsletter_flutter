@@ -57,22 +57,24 @@ class _NewsletterListScreenState extends State<NewsletterListScreen> {
                 ));
           }),
       ],
-      body: Expanded(
-        child: GetBuilder<NewsletterViewModel>(builder: (controller) {
-          return Obx(() => controller.loading.value
-              ? Center(
-                  child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                    Text('Loading newsletter'),
-                  ],
-                ))
-              : NewsletterListWidget(
-                  newsletterList: controller.newsletters,
-                ));
-        }),
-      ),
+      body: GetBuilder<NewsletterViewModel>(builder: (controller) {
+        return Obx(() => controller.loading.value
+            ? Center(
+                child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  Text('Loading newsletter'),
+                ],
+              ))
+            : controller.newsletters.isEmpty
+                ? const Center(
+                    child: Text('There are no registered newsletters yet'),
+                  )
+                : NewsletterListWidget(
+                    newsletterList: controller.newsletters,
+                  ));
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToCreateNewsletterScreen,
         child: const Icon(Icons.add),
