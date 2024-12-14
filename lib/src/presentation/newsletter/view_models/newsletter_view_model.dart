@@ -17,6 +17,11 @@ class NewsletterViewModel extends GetxController {
 
   final RxList<Newsletter> newsletters = <Newsletter>[].obs;
 
+  late final StreamController<Error<List<Newsletter>>> _errorsStreamController;
+
+  Stream<Error<List<Newsletter>>> get errorsStream =>
+      _errorsStreamController.stream;
+
   final loading = true.obs;
 
   StreamSubscription? _newsletterStreamSubscription;
@@ -26,6 +31,7 @@ class NewsletterViewModel extends GetxController {
     required NewsletterRepository newsletterRepository,
   })  : _newsletterCreateUseCase = newsletterCreateUseCase,
         _newsletterRepository = newsletterRepository {
+    _errorsStreamController = StreamController<Error<List<Newsletter>>>();
     createNewsletter = Command1(_createNewsletter);
   }
 
@@ -57,7 +63,7 @@ class NewsletterViewModel extends GetxController {
             newsletters.assignAll(result.value);
             break;
           case Error():
-            //TODO show error
+            _errorsStreamController.add(result);
             break;
           case Loading():
             loading.value = true;
@@ -65,5 +71,12 @@ class NewsletterViewModel extends GetxController {
         }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _errorsStreamController.close();
+    _newsletterStreamSubscription?.cancel();
+    super.dispose();
   }
 }

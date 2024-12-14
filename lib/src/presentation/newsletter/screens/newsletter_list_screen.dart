@@ -28,7 +28,7 @@ class NewsletterListScreen extends StatelessWidget {
               }),
             Expanded(
               child: GetBuilder<NewsletterViewModel>(builder: (controller) {
-                return controller.loading.value
+                return Obx(() => controller.loading.value
                     ? Center(
                         child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -39,7 +39,7 @@ class NewsletterListScreen extends StatelessWidget {
                       ))
                     : NewsletterListWidget(
                         newsletterList: controller.newsletters,
-                      );
+                      ));
               }),
             ),
           ],
