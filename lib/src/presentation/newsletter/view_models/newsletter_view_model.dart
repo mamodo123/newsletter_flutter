@@ -17,6 +17,10 @@ class NewsletterViewModel extends GetxController {
 
   final RxList<Newsletter> newsletters = <Newsletter>[].obs;
 
+  List<Newsletter> get newslettersFiltered {
+    return newsletters;
+  }
+
   late final StreamController<Error<List<Newsletter>>> _errorsStreamController;
 
   Stream<Error<List<Newsletter>>> get errorsStream =>
@@ -60,7 +64,6 @@ class NewsletterViewModel extends GetxController {
         loading.value = false;
         switch (result) {
           case Ok():
-            print(result.value.length);
             newsletters.assignAll(result.value);
             break;
           case Error():

@@ -10,7 +10,8 @@ import '../../../core/routing/routes.dart';
 import '../../../core/utils/result.dart';
 import '../../../domain/entities/newsletter.dart';
 import '../../widgets/connection_state.dart';
-import '../../widgets/newsletter_list_widget.dart';
+import '../../widgets/newsletter_filter_list.dart';
+import '../view_models/newsletter_filter_view_model.dart';
 
 class NewsletterListScreen extends StatefulWidget {
   const NewsletterListScreen({super.key});
@@ -26,6 +27,8 @@ class _NewsletterListScreenState extends State<NewsletterListScreen> {
   @override
   void initState() {
     final controller = Get.find<NewsletterViewModel>();
+    Get.put<NewsletterFilterViewModel>(
+        NewsletterFilterViewModel(controller.newsletters));
     final errorStream = controller.errorsStream;
     _errorStreamSubscription = errorStream.listen((error) {
       if (context.mounted) {
@@ -40,6 +43,7 @@ class _NewsletterListScreenState extends State<NewsletterListScreen> {
   @override
   void dispose() {
     _errorStreamSubscription.cancel();
+    Get.find<NewsletterFilterViewModel>().dispose();
     super.dispose();
   }
 
@@ -67,13 +71,7 @@ class _NewsletterListScreenState extends State<NewsletterListScreen> {
                   Text('Loading newsletter'),
                 ],
               ))
-            : controller.newsletters.isEmpty
-                ? const Center(
-                    child: Text('There are no registered newsletters yet'),
-                  )
-                : NewsletterListWidget(
-                    newsletterList: controller.newsletters,
-                  ));
+            : NewsletterFilterList());
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToCreateNewsletterScreen,

@@ -67,15 +67,13 @@ class NewsletterServiceSqlite extends NewsletterServiceLocal {
           .map((e) => e.remote!)
           .where((e) => e.isNotEmpty)
           .toList();
-      if (validRemotes.isNotEmpty) {
-        final placeholders = List.filled(validRemotes.length, '?').join(', ');
-        await SQLiteHelper.runDelete(
-          table,
-          'remote IS NOT NULL AND remote NOT IN ($placeholders)',
-          validRemotes,
-          db,
-        );
-      }
+      final placeholders = List.filled(validRemotes.length, '?').join(', ');
+      await SQLiteHelper.runDelete(
+        table,
+        'remote IS NOT NULL AND remote NOT IN ($placeholders)',
+        validRemotes,
+        db,
+      );
       for (final newsletter in newsletterList) {
         await SQLiteHelper.runInsertSql(table, newsletter.toJson(), db);
       }
