@@ -6,15 +6,16 @@ import 'fcm_helper.dart';
 
 abstract class FirebaseHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getCollectionStream(
-      String collectionPath) {
-    final firestoreInstance = FirebaseFirestore.instance;
+      String collectionPath,
+      {FirebaseFirestore? firestore}) {
+    final firestoreInstance = firestore ?? FirebaseFirestore.instance;
     return firestoreInstance.collection(collectionPath).snapshots();
   }
 
   static Future<DocumentReference<Map<String, dynamic>>> insertDocument(
       String collectionPath, Map<String, dynamic> data,
-      {String? documentId}) async {
-    final firestoreInstance = FirebaseFirestore.instance;
+      {String? documentId, FirebaseFirestore? firestore}) async {
+    final firestoreInstance = firestore ?? FirebaseFirestore.instance;
     final collection = firestoreInstance.collection(collectionPath);
     if (documentId == null) {
       return await collection.add(data);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:newsletter/src/core/helper/Internet_connection_mock.dart';
 import 'package:newsletter/src/core/utils/result.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_remote.dart';
 
@@ -19,7 +21,9 @@ class NewsletterCreateUseCaseRemote extends NewsletterCreateUseCase {
           await newsletterRepository.createNewsletter(newsletter);
 
       try {
-        if (await InternetConnection().hasInternetAccess) {
+        final internetConnection = Get.find<InternetConnection>();
+        if (internetConnection is! InternetConnectionMock &&
+            await internetConnection.hasInternetAccess) {
           await FCMHelper.sendNotificationToTopic(
               topic: 'newsletter',
               title: newsletter.title,

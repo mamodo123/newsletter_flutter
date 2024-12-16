@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:newsletter/src/core/config/databases/firebase_config.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_hybrid.dart';
@@ -6,13 +7,16 @@ import 'package:newsletter/src/data/repositories/newsletter/newsletter_repositor
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_local.dart';
 import 'package:newsletter/src/data/repositories/newsletter/newsletter_repository_remote.dart';
 import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_local.dart';
+import 'package:newsletter/src/data/services/newsletter/local/newsletter_service_mock.dart';
 import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote.dart';
+import 'package:newsletter/src/data/services/newsletter/remote/newsletter_service_remote_mock.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/create/newsletter_create_use_case.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/create/newsletter_create_use_case_remote.dart';
 import 'package:newsletter/src/domain/use_cases/newsletter/newsletter_sync_use_case.dart';
 
 import '../../data/services/newsletter/local/newsletter_service_sqlite.dart';
 import '../../data/services/newsletter/remote/newsletter_service_firebase.dart';
+import '../helper/Internet_connection_mock.dart';
 import 'databases/sqlite_config.dart';
 
 // Shared Dependencies
@@ -49,6 +53,9 @@ class HybridBindings extends Bindings {
           newsletterRepository:
               Get.find<NewsletterRepository>() as NewsletterRepositoryHybrid,
         ));
+
+    // Internet connection
+    Get.lazyPut(() => InternetConnection());
 
     // Shared Use Cases
     _sharedDependencies();
@@ -94,6 +101,38 @@ class RemoteBindings extends Bindings {
     Get.lazyPut<NewsletterCreateUseCase>(() => NewsletterCreateUseCaseRemote(
         newsletterRepository:
             Get.find<NewsletterRepository>() as NewsletterRepositoryRemote));
+
+    // Shared Use Cases
+    _sharedDependencies();
+  }
+}
+
+class HybridMockBindings extends Bindings {
+  @override
+  void dependencies() {
+    // Services
+    Get.lazyPut<NewsletterServiceLocal>(() => NewsletterServiceMock());
+
+    Get.lazyPut<NewsletterServiceRemote>(() => NewsletterServiceRemoteMock());
+
+    // Repositories
+    Get.lazyPut<NewsletterRepository>(() => NewsletterRepositoryHybridImpl(
+          newsletterServiceLocal: Get.find(),
+          newsletterServiceRemote: Get.find(),
+        ));
+
+    Get.lazyPut<NewsletterCreateUseCase>(() => NewsletterCreateUseCaseRemote(
+        newsletterRepository:
+            Get.find<NewsletterRepository>() as NewsletterRepositoryRemote));
+
+    // Specific Use Cases
+    Get.lazyPut(() => NewsletterSyncUseCase(
+          newsletterRepository:
+              Get.find<NewsletterRepository>() as NewsletterRepositoryHybrid,
+        ));
+
+    // Internet connection
+    Get.lazyPut<InternetConnection>(() => InternetConnectionMock());
 
     // Shared Use Cases
     _sharedDependencies();

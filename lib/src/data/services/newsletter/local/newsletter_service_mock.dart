@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,18 +8,17 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
   final List<NewsletterLocal> _items = List.generate(
     10,
     (index) => NewsletterLocal(
-      title: 'Teste $index',
-      category: 'Teste $index',
-      summary: 'Teste $index',
-      link: 'Teste $index',
+      title: 'Test $index',
+      category: 'Test $index',
+      summary: 'Test $index',
+      link: 'Test $index',
       createdAt: DateTime.now(),
       remote: null,
       uuid: Uuid().v4(),
     ),
   );
 
-  NewsletterServiceMock()
-      : super(BehaviorSubject<List<NewsletterLocal>>()) {
+  NewsletterServiceMock() : super(BehaviorSubject<List<NewsletterLocal>>()) {
     subject.add(List.unmodifiable(_items));
   }
 
@@ -36,10 +34,25 @@ class NewsletterServiceMock extends NewsletterServiceLocal {
   }
 
   @override
-  Future<void> updateRemotes(
-      List<NewsletterLocal> newsletterList) async {
-    _items.assignAll(newsletterList);
-    subject.add(newsletterList);
+  Future<void> updateRemotes(List<NewsletterLocal> newsletterList) async {
+    final validRemotes = newsletterList
+        .map((e) => e.remote)
+        .whereType<String>()
+        .where((e) => e.isNotEmpty)
+        .toList();
+    _items.removeWhere(
+        (item) => item.remote != null && !validRemotes.contains(item.remote));
+
+    for (final newsletter in newsletterList) {
+      final existingIndex = _items.indexWhere((e) => e.uuid == newsletter.uuid);
+      if (existingIndex != -1) {
+        _items[existingIndex] = newsletter;
+      } else {
+        _items.add(newsletter);
+      }
+    }
+
+    subject.add(List.unmodifiable(_items));
   }
 
   @override

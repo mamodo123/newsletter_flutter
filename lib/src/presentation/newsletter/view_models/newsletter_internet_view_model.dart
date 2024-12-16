@@ -10,7 +10,7 @@ class NewsletterInternetViewModel extends GetxController {
   final connectionState = ConnectionStateEnum.offline.obs;
 
   NewsletterInternetViewModel({required this.newsletterSyncUseCase}) {
-    InternetConnection().onStatusChange.listen((event) async {
+    Get.find<InternetConnection>().onStatusChange.listen((event) async {
       switch (event) {
         case InternetStatus.connected:
           connectionState.value = ConnectionStateEnum.synchronizing;

@@ -11,7 +11,6 @@ class NewsletterSyncUseCase {
 
   Future<Result<void>> onConnect() async {
     try {
-      await FirebaseHelper.initFirebase();
       await _newsletterRepository.syncRemoteWithLocal();
       await _newsletterRepository.connectToRemote();
       return Result.ok(null);

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:newsletter/src/core/utils/result.dart';
 import 'package:newsletter/src/data/models/newsletter/newsletter_remote.dart';
@@ -43,7 +44,7 @@ class NewsletterRepositoryHybridImpl extends NewsletterRepositoryHybrid {
   @override
   Future<Result<void>> createNewsletter(Newsletter newsletter) async {
     try {
-      if (await InternetConnection().hasInternetAccess) {
+      if (await Get.find<InternetConnection>().hasInternetAccess) {
         await newsletterServiceRemote.addNewsletter(NewsletterRemote(
           title: newsletter.title,
           category: newsletter.category,
